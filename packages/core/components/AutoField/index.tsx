@@ -107,6 +107,7 @@ type FieldPropsInternalOptional<ValueType = any, F = Field<any>> = FieldProps<
 > & {
   Label?: React.FC<FieldLabelPropsInternal>;
   label?: string;
+  labelIcon?: ReactNode;
   name?: string;
 };
 
@@ -116,6 +117,7 @@ export type FieldPropsInternal<ValueType = any, F = Field<any>> = FieldProps<
 > & {
   Label: React.FC<FieldLabelPropsInternal>;
   label?: string;
+  labelIcon?: ReactNode;
   id: string;
   name?: string;
 };
@@ -137,6 +139,7 @@ function AutoFieldInternal<
 
   const field = props.field as Field<ValueType>;
   const label = field.label;
+  const labelIcon = field.labelIcon;
 
   const defaultId = useSafeId();
   const resolvedId = id || defaultId;
@@ -168,6 +171,7 @@ function AutoFieldInternal<
     ...props,
     field,
     label,
+    labelIcon,
     Label,
     id: resolvedId,
   };
@@ -261,11 +265,14 @@ export function AutoFieldPrivate<
 
   const [localValue, setLocalValue] = useState(value);
 
-  const onChangeLocal = useCallback((val: any, ui?: Partial<UiState>) => {
-    setLocalValue(val);
+  const onChangeLocal = useCallback(
+    (val: any, ui?: Partial<UiState>) => {
+      setLocalValue(val);
 
-    onChange(val, ui);
-  }, []);
+      onChange(val, ui);
+    },
+    [onChange]
+  );
 
   useEffect(() => {
     // Prevent global state from setting local state if this field is focused
